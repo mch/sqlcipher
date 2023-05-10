@@ -334,11 +334,11 @@ void sqlcipher_mlock(void *ptr, sqlite_uint64 sz) {
 
   if(ptr == NULL || sz == 0) return;
 
-  sqlcipher_log(SQLCIPHER_LOG_TRACE, "sqlcipher_mem_lock: calling mlock(%p,%lu); _SC_PAGESIZE=%lu", ptr - offset, sz + offset, pagesize);
-  rc = mlock(ptr - offset, sz + offset);
-  if(rc!=0) {
-    sqlcipher_log(SQLCIPHER_LOG_ERROR, "sqlcipher_mem_lock: mlock(%p,%lu) returned %d errno=%d", ptr - offset, sz + offset, rc, errno);
-  }
+  /* sqlcipher_log(SQLCIPHER_LOG_TRACE, "sqlcipher_mem_lock: calling mlock(%p,%lu); _SC_PAGESIZE=%lu", ptr - offset, sz + offset, pagesize); */
+  /* rc = mlock(ptr - offset, sz + offset); */
+  /* if(rc!=0) { */
+  /*   sqlcipher_log(SQLCIPHER_LOG_ERROR, "sqlcipher_mem_lock: mlock(%p,%lu) returned %d errno=%d", ptr - offset, sz + offset, rc, errno); */
+  /* } */
 #elif defined(_WIN32)
 #if !(defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP || WINAPI_FAMILY == WINAPI_FAMILY_APP))
   int rc;
@@ -361,11 +361,11 @@ void sqlcipher_munlock(void *ptr, sqlite_uint64 sz) {
 
   if(ptr == NULL || sz == 0) return;
 
-  sqlcipher_log(SQLCIPHER_LOG_TRACE, "sqlcipher_mem_unlock: calling munlock(%p,%lu)", ptr - offset, sz + offset);
-  rc = munlock(ptr - offset, sz + offset);
-  if(rc!=0) {
-    sqlcipher_log(SQLCIPHER_LOG_ERROR, "sqlcipher_mem_unlock: munlock(%p,%lu) returned %d errno=%d", ptr - offset, sz + offset, rc, errno);
-  }
+  /* sqlcipher_log(SQLCIPHER_LOG_TRACE, "sqlcipher_mem_unlock: calling munlock(%p,%lu)", ptr - offset, sz + offset); */
+  /* rc = munlock(ptr - offset, sz + offset); */
+  /* if(rc!=0) { */
+  /*   sqlcipher_log(SQLCIPHER_LOG_ERROR, "sqlcipher_mem_unlock: munlock(%p,%lu) returned %d errno=%d", ptr - offset, sz + offset, rc, errno); */
+  /* } */
 #elif defined(_WIN32)
 #if !(defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP || WINAPI_FAMILY == WINAPI_FAMILY_APP))
   int rc;
