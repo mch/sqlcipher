@@ -29,7 +29,6 @@ fiddle.emcc-flags = \
   --minify 0 \
   -sALLOW_TABLE_GROWTH \
   -sABORTING_MALLOC \
-  -sSTRICT_JS \
   -sENVIRONMENT=web,worker \
   -sMODULARIZE \
   -sDYNAMIC_EXECUTION=0 \
@@ -40,7 +39,8 @@ fiddle.emcc-flags = \
   -sEXPORTED_FUNCTIONS=@$(abspath $(EXPORTED_FUNCTIONS.fiddle)) \
   -sEXPORTED_RUNTIME_METHODS=FS,wasmMemory \
   $(SQLITE_OPT) $(SHELL_OPT) \
-  -DSQLITE_SHELL_FIDDLE
+  -DSQLITE_SHELL_FIDDLE \
+  -I/home/mch/Downloads/openssl-wasm/src/include
 # -D_POSIX_C_SOURCE is needed for strdup() with emcc
 
 fiddle.EXPORTED_FUNCTIONS.in := \
@@ -52,7 +52,7 @@ $(EXPORTED_FUNCTIONS.fiddle): $(fiddle.EXPORTED_FUNCTIONS.in) $(MAKEFILE.fiddle)
 
 fiddle-module.js := $(dir.fiddle)/fiddle-module.js
 fiddle-module.wasm := $(subst .js,.wasm,$(fiddle-module.js))
-fiddle.cses := $(dir.top)/shell.c $(sqlite3-wasm.c)
+fiddle.cses := $(dir.top)/shell.c $(sqlite3-wasm.c) /home/mch/Downloads/openssl-wasm/src/libcrypto.a
 
 fiddle.SOAP.js := $(dir.fiddle)/$(notdir $(SOAP.js))
 $(fiddle.SOAP.js): $(SOAP.js)

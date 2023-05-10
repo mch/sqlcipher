@@ -150,6 +150,8 @@ sqlite3.h := $(dir.top)/sqlite3.h
 # Most SQLITE_OPT flags are set in sqlite3-wasm.c but we need them
 # made explicit here for building speedtest1.c.
 SQLITE_OPT = \
+  -DSQLITE_HAS_CODEC \
+  -DSQLCIPHER_CRYPTO_OPENSSL \
   -DSQLITE_ENABLE_FTS5 \
   -DSQLITE_ENABLE_RTREE \
   -DSQLITE_ENABLE_EXPLAIN_COMMENTS \
@@ -402,13 +404,8 @@ emcc.exportedRuntimeMethods := \
 emcc.jsflags += $(emcc.exportedRuntimeMethods)
 emcc.jsflags += -sUSE_CLOSURE_COMPILER=0
 emcc.jsflags += -sIMPORTED_MEMORY
-ifeq (3.1.31,$(emcc.version))
-  emcc.jsflags += -sSTRICT_JS=0
-  $(warning Disabling -sSTRICT_JS for emcc $(emcc.version): \
-     https://github.com/emscripten-core/emscripten/issues/18610)
-else
-  emcc.jsflags += -sSTRICT_JS=1
-endif
+emcc.jsflags += -sSTRICT_JS=0
+emcc.jsflags += -I/home/mch/Downloads/openssl-wasm/src/include
 emcc.environment := -sENVIRONMENT=web,worker
 ########################################################################
 # -sINITIAL_MEMORY: How much memory we need to start with is governed
@@ -658,7 +655,7 @@ $(4): $(3) $$(MAKEFILE) $$(sqlite3-wasm.c) $$(EXPORTED_FUNCTIONS.api) $$(pre-pos
 	$$(emcc.bin) -o $$@ $$(emcc_opt_full) $$(emcc.flags) \
     $$(emcc.jsflags) \
     $$(pre-post-sqlite3.flags.$(1)) $$(emcc.flags.sqlite3.$(1)) \
-    $$(cflags.common) $$(SQLITE_OPT) $$(sqlite3-wasm.c)
+    $$(cflags.common) $$(SQLITE_OPT) /home/mch/Downloads/openssl-wasm/src/libcrypto.a $$(sqlite3-wasm.c)
 	@$$(call SQLITE3.xJS.ESM-EXPORT-DEFAULT,$(2))
 	@if [ bundler-friendly = $(1) ]; then \
 		echo "Patching $(3) for sqlite3.wasm..."; \
@@ -772,7 +769,6 @@ emcc.speedtest1 += -sINITIAL_MEMORY=$(emcc.INITIAL_MEMORY.$(emcc.INITIAL_MEMORY)
 emcc.speedtest1.common += -sINVOKE_RUN=0
 emcc.speedtest1.common += --no-entry
 emcc.speedtest1.common += -sABORTING_MALLOC
-emcc.speedtest1.common += -sSTRICT_JS
 emcc.speedtest1.common += -sMODULARIZE
 emcc.speedtest1.common += -Wno-limited-postlink-optimizations
 EXPORTED_FUNCTIONS.speedtest1 := $(abspath $(dir.tmp)/EXPORTED_FUNCTIONS.speedtest1)

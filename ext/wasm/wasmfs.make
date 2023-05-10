@@ -38,7 +38,6 @@ emcc.flags.sqlite3-wasmfs += --no-entry
 emcc.flags.sqlite3-wasmfs += --minify 0
 emcc.flags.sqlite3-wasmfs += -sMODULARIZE
 emcc.flags.sqlite3-wasmfs += -sEXPORT_NAME=$(sqlite3.js.init-func)
-emcc.flags.sqlite3-wasmfs += -sSTRICT_JS
 emcc.flags.sqlite3-wasmfs += -sDYNAMIC_EXECUTION=0
 emcc.flags.sqlite3-wasmfs += -sNO_POLYFILL
 emcc.flags.sqlite3-wasmfs += -sWASM_BIGINT=$(emcc.WASM_BIGINT)
